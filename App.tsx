@@ -10,6 +10,7 @@ import { Theme, ThemeConfig } from './src/assets/styles';
 
 import { HomeScreen } from './src/components/screens';
 import { Text, TouchableOpacity } from 'react-native';
+import { DancaCadeira } from './src/components/screens/games';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ export default class App extends React.Component{
           <Stack.Screen 
             name="Home" 
             component={HomeScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="DancaCadeira" 
+            component={DancaCadeira} 
             options={{ headerShown: false }} 
           />
         </Stack.Navigator>

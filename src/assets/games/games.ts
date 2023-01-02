@@ -12,7 +12,7 @@ const Games = [
     id: 2,
     icon: require('../images/icons/incognito.png'),
     name: 'Detetive',
-    description: '',
+    description: 'Descrição',
     theme: Theme.Colors.Mauve
   },
   {

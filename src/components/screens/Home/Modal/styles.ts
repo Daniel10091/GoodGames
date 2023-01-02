@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
     overflow: 'hidden',
     zIndex: 1,
   },
@@ -34,7 +34,10 @@ const styles = StyleSheet.create({
   // TopBar styles
   modalTopBar: {
     width: '100%',
-    backgroundColor: Theme.Colors.Amethyst
+    backgroundColor: Theme.Colors.Amethyst,
+    shadowColor: Theme.Colors.Black,
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   modalButton: {
     width: '100%',
@@ -47,37 +50,60 @@ const styles = StyleSheet.create({
     color: Theme.Colors.White,
   },
 
-  // Header styles
-  modalHeader: {
+  // Modal container
+  modalContainer: {
+    flex: 1,
     width: '100%',
-    alignItems: 'center',
-    paddingVertical: 14,
   },
-  modalHeaderTitle: {
-    fontSize: 24,
+
+  // Game title styles
+  gameTitleContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  gameTitle: {
+    fontSize: 26,
     fontWeight: 'bold',
-    color: Theme.Colors.Charcoal,
   },
 
   // Body styles
-  modalBody: {
-    paddingHorizontal: 10,
+  body: {
+    flex: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
   },
-  modalBodyText: {
+  // Header styles
+  header: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Theme.Colors.Charcoal,
+  },
+  // Description styles
+  bodyContent: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'flex-start',
+  },
+  bodyDescription: {
     textAlign: 'justify',
+    marginTop: 20,
   },
 
   // Footer styles
   modalFooter: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    // borderWidth: 1,
   },
   startGameButton: {
     width: '100%',
-    height: 50,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Theme.Colors.MagentaCrayola,
