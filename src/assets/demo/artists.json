@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "",
+    "genres": [
+      {
+        "id": 1,
+        "name": ""
+      }
+    ],
+    "songs": [
+      {
+        "id": 1,
+        "name": "",
+        "idArtist": 1,
+        "idAlbum": 1,
+        "songUrl": ""
+      }
+    ]
+  }
+]

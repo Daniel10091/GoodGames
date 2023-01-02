@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "name": "",
+    "genre": "",
+    "artist": 1,
+    "duration": 0,
+    "songs": [
+      {
+        "id": 1,
+        "name": ""
+      }
+    ]
+  }
+]
