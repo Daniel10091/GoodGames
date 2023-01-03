@@ -1,5 +1,5 @@
-import { GameModel } from './Game';
+import { Game } from './Game';
 
 export {
-  GameModel 
+  Game 
 }

@@ -19,19 +19,15 @@ import GameModal from './Modal';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default class HomeScreen extends React.Component {
+export default function HomeScreen ({ navigation }) {
   
-  constructor(props) {
-    super(props);
-    this.state = { 
-      navigation: navigator,
-      updateRender: false, 
-      modalVisible: false, 
-      gameId: null 
-    };
-  }
+  const [ updateRender, setUpdateRender ]: any = React.useState(false);
+  const [ modalVisible, setModalVisible ]: any = React.useState(false);
+  // const [ gameName, setGameName ]: any = React.useState();
+  const [ gameId, setGameId ]: any = React.useState();
+  // const [ update, setUpdate ]: any = React.useState(true);
 
-  renderGames(id: number, icon: string, name: string, bgColor: string, target: string) {
+  function renderGames(id: number, icon: string, name: string, bgColor: string) {
     return (
       <TouchableOpacity 
         key={id} 
@@ -40,16 +36,10 @@ export default class HomeScreen extends React.Component {
           backgroundColor: bgColor
         }]} 
         onPress={() => {
-          this.setState({ modalVisible: true });
-          // this.props.navigation.navigate('Game', {
-          //   id: id,
-          //   name: name,
-          //   icon: icon,
-          //   target: target
-          // });
-          this.setState({
-            gameId: id
-          });
+          setModalVisible(true);
+          // setGameName(game);
+          setGameId(id);
+          // setUpdate(true);
         }} 
         activeOpacity={0.9}
       >
@@ -63,75 +53,84 @@ export default class HomeScreen extends React.Component {
     );
   }
   
-  render() {
+  const appConfig = AppConfig.appConfig; // Application configs was declared in here
 
-    const appConfig = AppConfig.appConfig; // Application configs was declared in here
+  // React.useEffect(() => {
+  //   if (update) {
+  //     console.log('Game id: ' + gameId);
+  //     setUpdate(false);
+  //   }
+  // }, update);
 
-    return (
-      <ScrollView 
-        style={[styles.container, {
-          backgroundColor: AppConfig.appDarkTheme ? '#1E1E1E' : Theme.Colors.AliceBlue
-        }]} 
-        showsVerticalScrollIndicator={false}
-      >
+  return (
+    <ScrollView 
+      style={[styles.container, {
+        backgroundColor: AppConfig.appDarkTheme ? '#1E1E1E' : Theme.Colors.AliceBlue
+      }]} 
+      showsVerticalScrollIndicator={false}
+    >
 
-        {/* Header */}
+      {/* Header */}
 
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.title}>{appConfig.name}</Text>
-          </View>
-          <View style={styles.headerRight}>
-            <TouchableOpacity 
-              style={styles.themeButton} 
-              onPress={() => {
-                // this.setState({
-                //   updateRender: !this.state.updateRender
-                // });
-                // AppConfig.appDarkTheme = !AppConfig.appDarkTheme;
-                alert('A opção ainda não está disponível.');
-              }} 
-              activeOpacity={0.6}
-            >
-              <Ionicons 
-                style={[styles.themeButtonIcon, {
-                  color: AppConfig.appDarkTheme ? Theme.Colors.MinionYellow : Theme.Colors.MidnigntGreenEagleGreen
-                }]} 
-                name={AppConfig.appDarkTheme ? "ios-sunny" : "ios-moon"} 
-              />
-            </TouchableOpacity>
-          </View>
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.title}>{appConfig.name}</Text>
         </View>
-        
-        {/* Main */}
-
-        <View style={styles.main}>
-          <View style={styles.gamesSection}>
-            {
-              Games.map(game => (
-                this.renderGames(game.id, game.icon, game.name, game.theme, '')
-              ))
-            }
-          </View>
-
-          {/* Modal */}
-          
-          <Modal 
-            visible={this.state.modalVisible}
-            animationType="slide" 
-            transparent={true} 
-            onRequestClose={() => this.setState({ modalVisible: false })}
+        <View style={styles.headerRight}>
+          <TouchableOpacity 
+            style={styles.themeButton} 
+            onPress={() => {
+              // this.setState({
+              //   updateRender: !this.state.updateRender
+              // });
+              // AppConfig.appDarkTheme = !AppConfig.appDarkTheme;
+              alert('A opção ainda não está disponível.');
+            }} 
+            activeOpacity={0.6}
           >
-            <GameModal 
-              modalState={this.state.modalVisible} 
-              data={this.state.gameId} 
-              hideModal={() => this.setState({ modalVisible: false })} 
+            <Ionicons 
+              style={[styles.themeButtonIcon, {
+                color: AppConfig.appDarkTheme ? Theme.Colors.MinionYellow : Theme.Colors.MidnigntGreenEagleGreen
+              }]} 
+              name={AppConfig.appDarkTheme ? "ios-sunny" : "ios-moon"} 
             />
-          </Modal>
+          </TouchableOpacity>
+        </View>
+      </View>
+      
+      {/* Main */}
 
+      <View style={styles.main}>
+        <View style={styles.gamesSection}>
+          {
+            Games.map(game => (
+              renderGames(game.id, game.icon, game.name, game.theme)
+            ))
+          }
         </View>
 
-      </ScrollView>
-    );
-  }
+        {/* Modal */}
+        
+        <Modal 
+          visible={modalVisible}
+          animationType="slide" 
+          transparent={true} 
+          onRequestClose={() => setModalVisible(!modalVisible)}
+        >
+          <GameModal 
+            modalState={modalVisible} 
+            gameId={gameId} 
+            hideModal={() => setModalVisible(false)} 
+            goToGame={(gameData) => {
+              navigation.navigate(gameData.target, {
+                game: gameData,
+              });
+            }}
+          />
+        </Modal>
+
+      </View>
+
+    </ScrollView>
+  );
 }

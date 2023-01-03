@@ -11,94 +11,27 @@ import {
 
 import styles from './styles';
 import { Ionicons } from '@expo/vector-icons';
+
+import { Game } from '../../../../models';
 import { Games } from '../../../../assets';
-import { GameModel } from '../../../../models';
-import { Audio } from 'expo-av';
 
-// import Video from 'react-native-video'; // npm install --save react-native-video@alpha
-
-import { Songs } from '../../../../assets/audios/songs';
-
-// Window height
 const windowHeight = Dimensions.get('window').height;
 
-export default function GameModal ( props ) {
+export default function GameModal ( props: any ) {
 
   const [ modalVisible, setModalVisible ] = React.useState(true);
-  const [ gameId, setGameId ] = React.useState(props.data);
-  const [ scrollTop, setScrollTop ] = React.useState(0);
-  const [ selectTrack, setSelectTrack ] = React.useState(0);
-  const [ sound, setSound ]: any = React.useState();
+  const [ gameId, setGameId ] = React.useState();
   
-  var gameModel: GameModel;
-
-  Games.filter(games => games.id === gameId).map(game => gameModel = game);
-  
-  // React.useEffect(() => {
-  //   if (gameId !== props.data) {
-  //     setGameId(props.data);
-  //     setModalVisible(true);
-  //   }
-  // }, [ gameId, props.data ]);
-
-  function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  function playing(numCadeiras: number) {
-    var time: any = getRandomInt(5, 20);
-    
-    console.log('\n');
-    console.log('Tempo: ' + time * 1000);
-    console.log('Cadeiras: ' + numCadeiras);
-
-    console.log('Tocando música');
-    
-    setTimeout(() => {
-      console.log('Música pausada');
-
-      numCadeiras = numCadeiras - 1;
-      
-      if (numCadeiras >= 1) {
-        console.log('Retirando cadeiras');
-        setTimeout(() =>{
-          playing(numCadeiras);
-        }, 7000);
-      } else {
-        console.log('\n');
-        console.log('Fim do Jogo!');
-      }
-    }, time * 1000);
-  }
-  
-  const currentTrack = Songs[selectTrack];
-
-  console.log(currentTrack);
-
-  const jogar = () => {
-    var numCadeiras: number = 10;
-    playing(numCadeiras);
-  }
-
-  async function playSound() {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync( require('../../../../assets/audios/songs/song-1.mp3') );
-    setSound(sound);
-
-    console.log('Playing Sound');
-    await sound.playAsync();
-  }
+  var gameData: Game;
 
   React.useEffect(() => {
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
+    if (gameId !== props.gameId) {
+      setGameId(props.gameId);
+      setModalVisible(true);
+    }
+  }, [ gameId, props.gameId ]);
+
+  Games.filter(games => games.id === props.gameId).map(game => gameData = game);
   
   return (
     <View style={styles.modal}>
@@ -130,16 +63,12 @@ export default function GameModal ( props ) {
           <ScrollView 
             contentContainerStyle={{paddingTop: 20}} 
             showsVerticalScrollIndicator={false} 
-            onScroll={ e => {
-              // this.state.scrollTop = e.nativeEvent.contentOffset.y;
-              // console.log(this.state.scrollTop);
-            }}
           >
             {/* Title */}
             <View style={styles.gameTitleContent}>
               <Text style={[styles.gameTitle, {
-                color: gameModel.theme
-              }]}>{gameModel.name}</Text>
+                color: gameData.theme
+              }]}>{gameData.name}</Text>
             </View>
             {/* Body */}
             <View style={styles.body}>
@@ -148,7 +77,30 @@ export default function GameModal ( props ) {
                 <Text style={styles.headerTitle}>Instruções</Text>
               </View>
               <View style={styles.bodyContent}>
-                <Text style={styles.bodyDescription}>{gameModel.description}</Text>
+                <Text style={styles.caption}>Como jogar?</Text>
+                <Text style={styles.description}>{gameData.description}</Text>
+                {
+                  gameData.rules != null ? (
+                    <View>
+                      <Text style={styles.caption}>Funções das cartas de ação</Text>
+                      <Text style={styles.description}>{gameData.rules.description}</Text>
+                      {
+                        gameData.rules.rules != null ? (
+                          <View style={styles.rulesContainer}>
+                            {
+                              gameData.rules.rules.map(role => (
+                                <View style={styles.ruleContent}>
+                                  <View style={styles.ruleIcon} />
+                                  <Text key={role.id} style={styles.rule}>{role.text}</Text>
+                                </View>
+                              ))
+                            }
+                          </View>
+                        ) : null
+                      }
+                    </View>
+                  ) : null
+                }
               </View>
             </View>
           </ScrollView>
@@ -158,18 +110,12 @@ export default function GameModal ( props ) {
           <TouchableOpacity 
             style={styles.startGameButton} 
             onPress={() => {
-              // props.hideModal();
-              // jogar();
-              playSound();
-              // navigation.navigate('Game');
-              // navigation.navigate('DancaCadeira', {
-              //   screen: 'Feed',
-              //   params: { sort: 'latest' },
-              // });
+              props.hideModal();
+              props.goToGame(gameData);
             }}
             activeOpacity={0.6}
           >
-            <Text style={styles.startGameButtonText}>JOGAR</Text>
+            <Text style={styles.startGameButtonLabel}>JOGAR</Text>
           </TouchableOpacity>
         </View>
       </View>

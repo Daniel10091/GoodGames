@@ -64,6 +64,12 @@ const styles = StyleSheet.create({
   gameTitle: {
     fontSize: 26,
     fontWeight: 'bold',
+    textShadowColor: Theme.Colors.Amethyst,
+    textShadowOffset: {
+      width: 0,
+      height: 0
+    },
+    textShadowRadius: 1,
   },
 
   // Body styles
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: Theme.Colors.Charcoal,
+    color: Theme.Colors.DeepSpaceSparkle,
   },
   // Description styles
   bodyContent: {
@@ -88,9 +94,36 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'flex-start',
   },
-  bodyDescription: {
+  caption: {
+    textAlign: 'left',
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Theme.Colors.DeepSpaceSparkle,
+  },
+  description: {
     textAlign: 'justify',
     marginTop: 20,
+    color: Theme.Colors.DeepSpaceSparkle,
+  },
+  rulesContainer: {
+    marginTop: 12,
+    marginHorizontal: 10,
+  },
+  ruleContent: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  ruleIcon: {
+    width: 6,
+    height: 6,
+    backgroundColor: Theme.Colors.Charcoal,
+    borderRadius: 50,
+  },
+  rule: {
+    textAlign: 'justify',
+    marginLeft: 10,
+    color: Theme.Colors.DeepSpaceSparkle,
   },
 
   // Footer styles
@@ -109,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.Colors.MagentaCrayola,
     borderRadius: 10,
   },
-  startGameButtonText: {
+  startGameButtonLabel: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Theme.Colors.White,

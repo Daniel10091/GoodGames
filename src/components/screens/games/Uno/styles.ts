@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
   },
   headerButtonIcon: {
     fontSize: 24,
-    color: Theme.Colors.White,
+    color: Theme.Colors.DeepSpaceSparkle,
   },
   title: {
     marginLeft: 10,
     fontSize: 18,
     fontWeight: 'bold',
-    color: Theme.Colors.White,
+    color: Theme.Colors.DeepSpaceSparkle,
   },
 
   // Body styles

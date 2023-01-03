@@ -9,8 +9,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Theme, ThemeConfig } from './src/assets/styles';
 
 import { HomeScreen } from './src/components/screens';
-import { Text, TouchableOpacity } from 'react-native';
-import { DancaCadeira } from './src/components/screens/games';
+import { 
+  DancaCadeira, 
+  Detetive, 
+  Uno, 
+  Domino, 
+  Adedonha, 
+  JogoTato 
+} from './src/components/screens/games';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +38,31 @@ export default class App extends React.Component{
           <Stack.Screen 
             name="DancaCadeira" 
             component={DancaCadeira} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="Detetive" 
+            component={Detetive} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="Uno" 
+            component={Uno} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="Domino" 
+            component={Domino} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="Adedonha" 
+            component={Adedonha} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="JogoTato" 
+            component={JogoTato} 
             options={{ headerShown: false }} 
           />
         </Stack.Navigator>
