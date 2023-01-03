@@ -172,7 +172,6 @@ export default function GameModal ( props ) {
             <Text style={styles.startGameButtonText}>JOGAR</Text>
           </TouchableOpacity>
         </View>
-        <Video/>
       </View>
     </View>
   );
