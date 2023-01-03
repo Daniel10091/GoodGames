@@ -15,31 +15,31 @@ import { Games } from '../../../../assets';
 import { GameModel } from '../../../../models';
 import { Audio } from 'expo-av';
 
+// import Video from 'react-native-video'; // npm install --save react-native-video@alpha
+
+import { Songs } from '../../../../assets/audios/songs';
+
 // Window height
 const windowHeight = Dimensions.get('window').height;
 
 export default function GameModal ( props ) {
 
-  const [ modalVisible, setModalVisible ] = React.useState();
+  const [ modalVisible, setModalVisible ] = React.useState(true);
   const [ gameId, setGameId ] = React.useState(props.data);
   const [ scrollTop, setScrollTop ] = React.useState(0);
-  const [ sound, setSound ] = React.useState();
+  const [ selectTrack, setSelectTrack ] = React.useState(0);
+  const [ sound, setSound ]: any = React.useState();
   
   var gameModel: GameModel;
 
   Games.filter(games => games.id === gameId).map(game => gameModel = game);
   
-  var song = new Audio('../../../../assets/audios/songs/song-1.mp3');
-
-  async function playSound() {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync( require('./assets/Hello.mp3')
-    );
-    setSound(sound);
-
-    console.log('Playing Sound');
-    await sound.playAsync();
-  }
+  // React.useEffect(() => {
+  //   if (gameId !== props.data) {
+  //     setGameId(props.data);
+  //     setModalVisible(true);
+  //   }
+  // }, [ gameId, props.data ]);
 
   function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -72,11 +72,33 @@ export default function GameModal ( props ) {
       }
     }, time * 1000);
   }
+  
+  const currentTrack = Songs[selectTrack];
+
+  console.log(currentTrack);
 
   const jogar = () => {
     var numCadeiras: number = 10;
     playing(numCadeiras);
   }
+
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync( require('../../../../assets/audios/songs/song-1.mp3') );
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
   
   return (
     <View style={styles.modal}>
@@ -84,7 +106,6 @@ export default function GameModal ( props ) {
       <Pressable  
         style={styles.modalBackground} 
         onPress={() => {
-          // this.setState({ modalVisible: false }); 
           props.hideModal();
         }} 
       />
@@ -138,7 +159,8 @@ export default function GameModal ( props ) {
             style={styles.startGameButton} 
             onPress={() => {
               // props.hideModal();
-              jogar();
+              // jogar();
+              playSound();
               // navigation.navigate('Game');
               // navigation.navigate('DancaCadeira', {
               //   screen: 'Feed',
@@ -150,6 +172,7 @@ export default function GameModal ( props ) {
             <Text style={styles.startGameButtonText}>JOGAR</Text>
           </TouchableOpacity>
         </View>
+        <Video/>
       </View>
     </View>
   );

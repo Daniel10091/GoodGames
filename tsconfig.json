@@ -1,6 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "jsx": "react", // Adicionado por necessidade na minha máquina
     "strict": false
   }
 }
