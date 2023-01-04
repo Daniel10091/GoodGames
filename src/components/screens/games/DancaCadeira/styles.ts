@@ -65,6 +65,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Theme.Colors.White,
   },
+
+  circle: {
+    width: 200,
+    height: 200,
+    backgroundColor: Theme.Colors.Amethyst,
+    borderRadius: 200,
+  },
 });
 
 export default styles;

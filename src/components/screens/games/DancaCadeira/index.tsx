@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Animated } from 'react-native';
 import { Audio } from 'expo-av';
 
 import styles from './styles';
@@ -23,6 +23,8 @@ export default function DancaCadeira ({ route, navigation }) {
   const music = React.useRef(new Audio.Sound());
 
   const SampleTrack = require('../../../../assets/audios/songs/song-1.mp3');
+  
+  const rotateValue = React.useRef(new Animated.Value(1)).current;
   
   var songCurrentTime = 0;
   var chairs = numChairs;
@@ -123,6 +125,14 @@ export default function DancaCadeira ({ route, navigation }) {
   }, [gaming]);
 
   const PlayGame = () => {
+
+    Animated.timing(rotateValue, {
+      toValue: gaming ? 1 : 0.5,
+      duration: 300,
+      useNativeDriver: true
+    })
+      .start()
+
     setGaming(true);
     setPaused(false);
 
@@ -145,10 +155,10 @@ export default function DancaCadeira ({ route, navigation }) {
       
       if (!gaming) {
         setTimeout(() => {
-          PauseAudio();
           setPaused(true);
           timePause = waitingTimed;
           timeInPaused();
+          PauseAudio();
           console.log('Música pausada');
     
           if (songCurrentTime !== 0) {
@@ -242,6 +252,13 @@ export default function DancaCadeira ({ route, navigation }) {
               </View>
             ) : null
           }
+          <Animated.View style={{ 
+            transform: [
+              { scale: rotateValue }
+            ]
+          }}>
+            <View style={styles.circle} />
+            </Animated.View>
         </View>
         <View style={styles.bodyFooter}>
           <TouchableOpacity 
