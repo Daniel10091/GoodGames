@@ -106,21 +106,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: Theme.Colors.DeepSpaceSparkle,
   },
-  rulesContainer: {
+  functionsContainer: {
     marginTop: 12,
     marginHorizontal: 10,
   },
-  ruleContent: {
+  functionContent: {
     flexDirection: 'row',
     marginTop: 10,
   },
-  ruleIcon: {
+  functionIcon: {
     width: 6,
     height: 6,
     backgroundColor: Theme.Colors.Charcoal,
     borderRadius: 50,
   },
-  rule: {
+  function: {
     textAlign: 'justify',
     marginLeft: 10,
     color: Theme.Colors.DeepSpaceSparkle,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 14,
-    // borderWidth: 1,
+    backgroundColor: 'transparent',
   },
   startGameButton: {
     width: '100%',

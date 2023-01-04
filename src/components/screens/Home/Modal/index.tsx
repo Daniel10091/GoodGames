@@ -82,16 +82,24 @@ export default function GameModal ( props: any ) {
                 {
                   gameData.rules != null ? (
                     <View>
-                      <Text style={styles.caption}>Funções das cartas de ação</Text>
+                      <Text style={styles.caption}>{gameData.rules.title}</Text>
                       <Text style={styles.description}>{gameData.rules.description}</Text>
+                    </View>
+                  ) : null
+                }
+                {
+                  gameData.functions != null ? (
+                    <View>
+                      <Text style={styles.caption}>{gameData.functions.title}</Text>
+                      <Text style={styles.description}>{gameData.functions.description}</Text>
                       {
-                        gameData.rules.rules != null ? (
-                          <View style={styles.rulesContainer}>
+                        gameData.functions.functions != null ? (
+                          <View style={styles.functionsContainer}>
                             {
-                              gameData.rules.rules.map(role => (
-                                <View style={styles.ruleContent}>
-                                  <View style={styles.ruleIcon} />
-                                  <Text key={role.id} style={styles.rule}>{role.text}</Text>
+                              gameData.functions.functions.map(functions => (
+                                <View key={functions.id} style={styles.functionContent}>
+                                  <View style={styles.functionIcon} />
+                                  <Text style={styles.function}>{functions.text}</Text>
                                 </View>
                               ))
                             }

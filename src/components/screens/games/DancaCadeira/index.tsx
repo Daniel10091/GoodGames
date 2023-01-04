@@ -12,6 +12,7 @@ export default function DancaCadeira ({ route, navigation }) {
 
   const [ gameData, setGameData ] = React.useState(game);
   const [ sound, setSound ]: any = React.useState();
+  const [ gaming, setGaming ]: any = React.useState(false);
   
   function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -24,51 +25,67 @@ export default function DancaCadeira ({ route, navigation }) {
   async function playing(numCadeiras: number, minTime: number, maxTime: number) {
     var time: any = getRandomInt(minTime, maxTime);
     const { sound } = await Audio.Sound.createAsync( require('../../../../assets/audios/songs/song-1.mp3') );
-    
-    console.log('\n');
-    console.log('Tempo: ' + time * 1000);
-    console.log('Cadeiras: ' + numCadeiras);
 
-    console.log('Current time: ' + songCurrentTime);
-    
-    if (songCurrentTime !== 0) {
-      sound.playFromPositionAsync(songCurrentTime);
-    } else {
-      sound.playAsync();
-    }
 
-    console.log('Tocando música');
-    
-    setTimeout(() => {
-      sound.pauseAsync();
-      console.log('Música pausada');
-
-      if (songCurrentTime !== 0) {
-        songCurrentTime = songCurrentTime + time * 1000;
-      } else {
-        songCurrentTime = time * 1000;
-      }
-
-      numCadeiras = numCadeiras - 1;
+    if (gaming) {
+      console.log('\n');
+      console.log('Tempo: ' + time * 1000);
+      console.log('Cadeiras: ' + numCadeiras);
+      console.log('Current time: ' + songCurrentTime);
       
-      if (numCadeiras >= 1) {
-        console.log('Retirando cadeiras');
-        setTimeout(() =>{
-          playing(numCadeiras, minTime, maxTime);
-        }, 7000);
+      if (songCurrentTime !== 0) {
+        await sound.playFromPositionAsync(songCurrentTime);
       } else {
-        console.log('\n');
-        console.log('Fim do Jogo!');
+        await sound.playAsync();
       }
-    }, time * 1000);
+  
+      console.log('Tocando música');
+      
+      setTimeout(() => {
+        sound.pauseAsync();
+        console.log('Música pausada');
+  
+        if (songCurrentTime !== 0) {
+          songCurrentTime = songCurrentTime + time * 1000;
+        } else {
+          songCurrentTime = time * 1000;
+        }
+  
+        numCadeiras = numCadeiras - 1;
+        
+        if (numCadeiras >= 1) {
+          console.log('Retirando cadeiras');
+          if (gaming) setTimeout(() =>{
+            playing(numCadeiras, minTime, maxTime);
+          }, 7000);
+        } else {
+          console.log('\n');
+          setGaming(false);
+          console.log('Fim do Jogo!');
+        }
+      }, time * 1000);
+    } else {
+      await sound.pauseAsync();
+      console.log('Fim do Jogo!');
+      songCurrentTime = 0;
+      console.log('Current time: ' + songCurrentTime);
+    }
   }
 
-  const jogar = () => {
-    var numCadeiras: number = 10;
-    playing(numCadeiras, 10, 15);
+  const play = () => {
+    // var numCadeiras: number = 10;
+    setGaming(true);
+    console.log('Jogando: ' + gaming);
+    // playing(numCadeiras, 10, 15);
+  }
+
+  const stop = () => {
+    setGaming(false);
+    console.log('Jogando: ' + gaming);
   }
 
   React.useEffect(() => {
+    console.log('Jogando: ' + gaming);
     return sound
       ? () => {
           console.log('Unloading Sound');
@@ -112,10 +129,10 @@ export default function DancaCadeira ({ route, navigation }) {
         <View style={styles.bodyFooter}>
           <TouchableOpacity 
             style={styles.startGameButton} 
-            onPress={() => jogar()} 
+            onPress={() => gaming ? stop() : play()} 
             activeOpacity={0.6}
           >
-            <Text style={styles.startGameButtonLabel}>JOGAR</Text>
+            <Text style={styles.startGameButtonLabel}>{gaming ? 'PARAR' : 'INICIAR'}</Text>
           </TouchableOpacity>
         </View>
       </View>
