@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, TouchableOpacity, Animated, TextInput, Modal } from 'react-native';
 import { Audio } from 'expo-av';
 
 import styles from './styles';
 import { Ionicons } from '@expo/vector-icons';
+import DancaCadeiraSettings from './Settings';
 
 export default function DancaCadeira ({ route, navigation }) {
   
   const { game } = route.params;
 
-  const [ numChairs, setNumChairs ]: any = React.useState(10);
-  const [ minPauseTime, setMinPauseTime ]: any = React.useState(15);
-  const [ maxPauseTime, setMaxPauseTime ]: any = React.useState(20);
-  const [ waitingTimed, setWaitingTimed ]: any = React.useState(7);
+  const [ modalVisible, setModalVisible ]: any = React.useState(false);
+  const [ numChairs, setNumChairs ]: any = React.useState();
+  const [ minPauseTime, setMinPauseTime ]: any = React.useState();
+  const [ maxPauseTime, setMaxPauseTime ]: any = React.useState();
+  const [ waitingTimed, setWaitingTimed ]: any = React.useState();
   const [ gaming, setGaming ] = React.useState(false);
   const [ paused, setPaused ] = React.useState(true);
   const [ timePaused, setTimePaused ]: any = React.useState();
@@ -37,6 +39,10 @@ export default function DancaCadeira ({ route, navigation }) {
 
   React.useEffect(() => {
     LoadAudio();
+    setNumChairs(3);
+    setMinPauseTime(15);
+    setMaxPauseTime(20);
+    setWaitingTimed(7);
     setGaming(false);
     setPaused(true);
   }, []);
@@ -117,95 +123,91 @@ export default function DancaCadeira ({ route, navigation }) {
     }, 1000);
   };
 
-  React.useEffect(() => {
-    console.log('\n');
-    console.log('Pausado? ' + paused);
-    console.log('Jogando? ' + gaming);
-    console.log('\n');
-  }, [gaming]);
+  // React.useEffect(() => {
+  //   console.log('\n');
+  //   console.log('GoodGames');
+  //   console.log('Pausado? ' + paused);
+  //   console.log('Jogando? ' + gaming);
+  //   console.log('\n');
+  // }, [gaming]);
 
-  const PlayGame = () => {
+  const PlayGame = () => { // *** Main function ***
 
     Animated.timing(rotateValue, {
       toValue: gaming ? 1 : 0.5,
       duration: 300,
       useNativeDriver: true
-    })
-      .start()
+    }).start()
 
     setGaming(true);
     setPaused(false);
 
-    var time: any = getRandomInt(minPauseTime, maxPauseTime);
+    var time = getRandomInt(minPauseTime, maxPauseTime);
     
     times = time;
 
     setPausingIn(time);
     timeForPause();
 
-    if (!gaming) {
-      console.log('\n');
-      console.log('Tempo: ' + time * 1000);
-      console.log('Cadeiras: ' + numChairs);
-      console.log('Current time: ' + songCurrentTime);
-      
-      PlayAudio();
-  
-      console.log('Tocando música');
-      
-      if (!gaming) {
-        setTimeout(() => {
-          setPaused(true);
-          timePause = waitingTimed;
-          timeInPaused();
-          PauseAudio();
-          console.log('Música pausada');
+    console.log('\n');
+    console.log('Tempo: ' + time * 1000);
+    console.log('Cadeiras: ' + numChairs);
+    console.log('Current time: ' + songCurrentTime);
     
-          if (songCurrentTime !== 0) {
-            songCurrentTime = songCurrentTime + time * 1000;
-          } else {
-            songCurrentTime = time * 1000;
-          }
-          
-          if (!gaming) {
-            if (numChairs >= 1) {
-              chairs = chairs - 1;
-              setNumChairs(chairs);
-              console.log('Retirando cadeiras');
-              console.log('Tempo de espera: ' + waitingTimed + 's');
-              if (!gaming) {
-                setTimeout(() => {
-                  PlayGame();
-                  setGaming(true);
-                }, waitingTimed * 1000);
-              }
-            } else {
-              console.log('\n');
-              StopAudio();
-              setGaming(false);
-              console.log('Fim do Jogo!');
-            }
-          }
-        }, time * 1000);
-      }
-    } else {
-      StopAudio();
-      setGaming(false);
+    PlayAudio();
+    console.log('Tocando música');
+    
+    setTimeout(() => {
       setPaused(true);
-      console.log('Fim do Jogo!');
-      songCurrentTime = 0;
-      console.log('Current time: ' + songCurrentTime);
-    }
+      timePause = waitingTimed;
+      timeInPaused();
+      PauseAudio();
+      console.log('Música pausada');
+
+      if (songCurrentTime !== 0) {
+        songCurrentTime = songCurrentTime + time * 1000;
+      } else {
+        songCurrentTime = time * 1000;
+      }
+      
+      if (numChairs >= 1) {
+        chairs = chairs - 1;
+        console.log(chairs);
+        setNumChairs(chairs);
+        console.log('Retirando cadeiras');
+        console.log('Tempo de espera: ' + waitingTimed + 's');
+        setTimeout(() => {
+          PlayGame();
+          setGaming(true);
+        }, waitingTimed * 1000);
+      } else {
+        console.log('\n');
+        StopAudio();
+        setGaming(false);
+        console.log('Fim do Jogo!');
+      }
+    }, time * 1000);
+
+    // if (!gaming) {
+    // } else {
+    //   StopAudio();
+    //   setGaming(false);
+    //   setPaused(true);
+    //   console.log('Fim do Jogo!');
+    //   songCurrentTime = 0;
+    //   console.log('Current time: ' + songCurrentTime);
+    // }
   }
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
 
-  //   console.log('\n');
-  //   console.log('Jogando: ' + gaming);
-  //   console.log('Cadeiras: ' + numChairs);
-  //   console.log('\n');
+    console.log('\n');
+    console.log('GoodGames');
+    console.log('Jogando: ' + gaming);
+    console.log('Cadeiras: ' + numChairs);
+    console.log('\n');
 
-  // }, [gaming, numChairs]);
+  }, [gaming, numChairs]);
 
   return (
     <View style={styles.container}>
@@ -227,7 +229,7 @@ export default function DancaCadeira ({ route, navigation }) {
         <View style={styles.headerRow}>
           <TouchableOpacity 
             style={styles.headerButton} 
-            onPress={() => alert('Settings')} 
+            onPress={() => setModalVisible(true)} 
             activeOpacity={0.6}
           >
             <Ionicons style={styles.headerButtonIcon} name="ios-settings-outline" />
@@ -237,10 +239,33 @@ export default function DancaCadeira ({ route, navigation }) {
       {/* Body */}
       <View style={styles.bodyContainer}>
         <View style={styles.bodyContent}>
+
+
+          <Modal 
+            visible={modalVisible}
+            animationType="slide" 
+            transparent={true} 
+            onRequestClose={() => setModalVisible(!modalVisible)}
+          >
+            <DancaCadeiraSettings 
+              chairsQuantity={numChairs} 
+              minPauseInterval={minPauseTime} 
+              maxPauseInterval={maxPauseTime} 
+              setChairsQuantity={(value: number) => setNumChairs(value)} 
+              setMinPauseInterval={(value: number) => setMinPauseTime(value)} 
+              setMaxPauseInterval={(value: number) => setMaxPauseTime(value)} 
+              closeModal={() => setModalVisible(false)} 
+            />
+          </Modal>
+
+
+
+
+
           {
             gaming ? (
               <View>
-                <Text>Pausando em: {pausingIn}s</Text>
+                {/* <Text>Pausando em: {pausingIn}s</Text> */}
                 <Text>Cadeiras: {numChairs}</Text>
               </View>
             ) : null
@@ -252,13 +277,13 @@ export default function DancaCadeira ({ route, navigation }) {
               </View>
             ) : null
           }
-          <Animated.View style={{ 
+          {/* <Animated.View style={{ 
             transform: [
               { scale: rotateValue }
             ]
           }}>
             <View style={styles.circle} />
-            </Animated.View>
+          </Animated.View> */}
         </View>
         <View style={styles.bodyFooter}>
           <TouchableOpacity 
@@ -266,7 +291,7 @@ export default function DancaCadeira ({ route, navigation }) {
             onPress={() => PlayGame()} 
             activeOpacity={0.6}
           >
-            <Text style={styles.startGameButtonLabel}>{gaming ? 'PARAR' : 'INICIAR'}</Text>
+            <Text style={styles.startGameButtonLabel}>{gaming ? 'RODANDO...' : 'INICIAR'}</Text>
           </TouchableOpacity>
         </View>
       </View>
